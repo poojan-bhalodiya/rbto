@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 const authRoutes = require("./src/routes/authroutes.js");
 const authorizationMiddleware = require("./src/middleware/authorization"); // Import the authorization middleware
 

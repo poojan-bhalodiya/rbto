@@ -15,17 +15,17 @@ const validateRequiredFields = (fields) => {
 exports.createUser = (req, res) => {
   // Define the required fields
   const requiredFields = [
-    req.body.Username,
-    req.body.E_mail_Address,
-    req.body.Name_of_Member,
-    req.body.Password,
+    req.body.username,
+    req.body.e_mail_address,
+    req.body.name_of_member,
+    req.body.password,
   ];
 
   // Check if required fields are present
   if (!validateRequiredFields(requiredFields)) {
     return res.status(400).json({
       statusCode: 1,
-      responseData: {
+      response: {
         status: false,
         message: "Required fields are missing or empty",
       },
@@ -33,10 +33,10 @@ exports.createUser = (req, res) => {
   }
 
   // Check if password and confirm password match
-  if (req.body.Password !== req.body["Confirm_your_Password"]) {
+  if (req.body.password !== req.body["confirm_your_password"]) {
     return res.status(400).json({
       statusCode: 1,
-      responseData: {
+      response: {
         status: false,
         message: "Password and Confirm Password do not match",
       },
@@ -44,10 +44,10 @@ exports.createUser = (req, res) => {
   }
 
   // Validate email syntax
-  if (!isValidEmail(req.body.E_mail_Address)) {
+  if (!isValidEmail(req.body.e_mail_address)) {
     return res.status(400).json({
       statusCode: 1,
-      responseData: {
+      response: {
         status: false,
         message: "Invalid email address",
       },
@@ -55,10 +55,10 @@ exports.createUser = (req, res) => {
   }
 
   // Validate password
-  if (!isValidPassword(req.body.Password)) {
+  if (!isValidPassword(req.body.password)) {
     return res.status(400).json({
       statusCode: 1,
-      responseData: {
+      response: {
         status: false,
         message:
           "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character ",
@@ -67,10 +67,10 @@ exports.createUser = (req, res) => {
   }
 
   // Check if the email is already registered
-  const checkEmailQuery = "SELECT * FROM register WHERE E_mail_Address = ?";
+  const checkEmailQuery = "SELECT * FROM register WHERE e_mail_address = ?";
   db.query(
     checkEmailQuery,
-    [req.body.E_mail_Address],
+    [req.body.e_mail_address],
     (emailErr, emailResult) => {
       if (emailErr) {
         console.error("Error checking email: " + emailErr.stack);
@@ -80,7 +80,7 @@ exports.createUser = (req, res) => {
       if (emailResult && emailResult.length > 0) {
         return res.status(400).json({
           statusCode: 1,
-          responseData: {
+          response: {
             status: false,
             message: "Email address is already registered",
           },
@@ -88,53 +88,53 @@ exports.createUser = (req, res) => {
       }
       const {
         id,
-        Username,
-        E_mail_Address,
-        Name_of_Member,
-        Member_Photo,
-        Spouse_Name,
-        Membership_No,
-        Mobile_No,
-        Date_of_Birth,
-        Spouse_Mobile,
-        Spouse_Email,
-        Spouse_Date_of_Birth,
-        Date_of_Anniversary,
-        Residence_Address,
-        Business_Category,
-        Business_Name,
-        Business_Logo,
-        Business_Address,
-        Interest_Hobbies,
-        Password,
-        Confirm_your_Password,
+        username,
+        e_mail_address,
+        name_of_member,
+        member_photo,
+        spouse_name,
+        membership_no,
+        mobile_no,
+        date_of_birth,
+        spouse_mobile,
+        spouse_email,
+        spouse_date_of_birth,
+        date_of_anniversary,
+        residence_address,
+        business_category,
+        business_name,
+        business_logo,
+        business_address,
+        interest_hobbies,
+        password,
+        confirm_your_password,
       } = req.body;
 
       const createUserQuery =
-        "INSERT INTO register (id, Username, E_mail_Address, Name_of_Member, Member_Photo, Spouse_Name, Membership_No, Mobile_No, Date_of_Birth, Spouse_Mobile, Spouse_Email, Spouse_Date_of_Birth, Date_of_Anniversary, Residence_Address, Business_Category, Business_Name, Business_Logo, Business_Address, Interest_Hobbies, Password, Confirm_your_Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO register (id,username,e_mail_address,name_of_member,member_photo,spouse_name,membership_no,mobile_no,date_of_birth,spouse_mobile,spouse_email,spouse_date_of_birth,date_of_anniversary,residence_address,business_category,business_name,business_logo,business_address,interest_hobbies,password,confirm_your_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
       const values = [
         id,
-        Username,
-        E_mail_Address,
-        Name_of_Member,
-        Member_Photo,
-        Spouse_Name,
-        Membership_No,
-        Mobile_No,
-        Date_of_Birth,
-        Spouse_Mobile,
-        Spouse_Email,
-        Spouse_Date_of_Birth,
-        Date_of_Anniversary,
-        Residence_Address,
-        Business_Category,
-        Business_Name,
-        Business_Logo,
-        Business_Address,
-        Interest_Hobbies,
-        Password,
-        Confirm_your_Password,
+        username,
+        e_mail_address,
+        name_of_member,
+        member_photo,
+        spouse_name,
+        membership_no,
+        mobile_no,
+        date_of_birth,
+        spouse_mobile,
+        spouse_email,
+        spouse_date_of_birth,
+        date_of_anniversary,
+        residence_address,
+        business_category,
+        business_name,
+        business_logo,
+        business_address,
+        interest_hobbies,
+        password,
+        confirm_your_password,
       ];
 
       db.query(createUserQuery, values, (err, result) => {
@@ -146,7 +146,7 @@ exports.createUser = (req, res) => {
 
         try {
           const token = jwt.sign(
-            { user_id: id, E_mail_Address },
+            { user_id: id, e_mail_address },
             "UNSAFE_STRING",
             {
               expiresIn: "24h",
@@ -159,16 +159,16 @@ exports.createUser = (req, res) => {
             res.set("Authorization", `Bearer ${token}`);
             res.status(200).json({
               statusCode: 1,
-              responseData: {
+              response: {
                 status: true,
                 message: "User is registered",
-                user: { id, E_mail_Address, token }, // Adjust the response as needed
+                user: { id, e_mail_address, token }, // Adjust the response as needed
               },
             });
           } else {
             res.status(400).json({
               statusCode: 1,
-              responseData: {
+              response: {
                 status: false,
                 message: "User creation failed",
               },
@@ -177,7 +177,7 @@ exports.createUser = (req, res) => {
         } catch (err) {
           res.status(400).json({
             statusCode: 1,
-            responseData: {
+            response: {
               status: false,
               message: err.message,
             },

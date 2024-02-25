@@ -7,7 +7,7 @@ const authorizationMiddleware = (req, res, next) => {
   if (!providedStoreValue || providedStoreValue !== expectedStoreValue) {
     return res
       .status(401)
-      .json({ error: "Unauthorized - Invalid store value" });
+      .json({ error: "Unauthorized" });
   }
 
   // Authorization successful, continue with the next middleware or route handler
