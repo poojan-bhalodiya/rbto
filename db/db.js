@@ -22,19 +22,20 @@ db.connect((err) => {
 
   // Create 'users' table
   const createTableQuery = `
-  create TABLE IF NOT EXISTS register (
+  create TABLE IF NOT EXISTS pooja (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username NVARCHAR(200),
-    e_mail_address NVARCHAR(200),
-    name_of_member VARCHAR(200),
-    member_photo NVARCHAR(800),
-    spouse_name VARCHAR(200),
+    email NVARCHAR(200),
+    visible_email BOOLEAN,
+    member_name VARCHAR(200),
+    profile_pic NVARCHAR(800),
     membership_no INT,
-    mobile_no INT(10),
+    mobile_number INT(10),
     date_of_birth DATE,
-    spouse_mobile INT(10),
+    spouse_name VARCHAR(200),
+    spouse_mobile_no INT(10),
     spouse_email NVARCHAR(200),
-    spouse_date_of_birth DATE,
+    spouse_dob DATE,
     date_of_anniversary DATE,
     residence_address NVARCHAR(300),
     business_category VARCHAR(200),
@@ -43,7 +44,8 @@ db.connect((err) => {
     business_address VARCHAR(300),
     interest_hobbies VARCHAR(200),
     password NVARCHAR(16),
-    confirm_your_password NVARCHAR(16),
+    password_confirmation NVARCHAR(16),
+    terms_conditions BOOLEAN,
     token NVARCHAR(300)
   );
   
